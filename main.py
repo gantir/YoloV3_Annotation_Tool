@@ -163,7 +163,7 @@ class LabelTool():
                 tkMessageBox.showerror("Error!", message = "The folder should be numbers")
                 return
         if not os.path.isdir('./Images/%s' % self.category):
-           tkMessageBox.showerror("Error!", message = "The specified dir doesn't exist!")
+           tkMessageBox.showerror("Error!", message = "The specified dir {} doesn't exist!".format(self.category))
            return
         # get image list
         self.imageDir = os.path.join(r'./Images', '%s' %(self.category))
@@ -192,14 +192,14 @@ class LabelTool():
         self.img = Image.open(imagepath)
         self.curimg_w, self.curimg_h = self.img.size
         self.tkimg = ImageTk.PhotoImage(self.img)
-        
+
         if self.tkimg.width() >  1300:
             print("Alert for standard resolution computers: please resize your picture, in this display the whole picture is not shown")
             tkMessageBox.showwarning("Warning","Whole pic might not be shown, do possibly resize before continuing")
         elif self.tkimg.height() > 800:
             print("Alert for standard resolution computers: please resize your picture, in this display the whole picture is not shown")
             tkMessageBox.showwarning("Warning","Whole pic might not be shown, do possibly resize before continuing")
-        
+
         self.mainPanel.config(width = max(self.tkimg.width(), 400), height = max(self.tkimg.height(), 400))
         self.mainPanel.create_image(0, 0, image = self.tkimg, anchor=NW)
         self.progLabel.config(text = "%04d/%04d" %(self.cur, self.total))
@@ -225,7 +225,7 @@ class LabelTool():
                     self.bboxIdList.append(tmpId)
                     self.listbox.insert(END, '(%d, %d) -> (%d, %d) -> (%s)' %(tmp[0], tmp[1], tmp[2], tmp[3], classes[int(yolo_data[0])]))
                     self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[int(yolo_data[0])])
-        
+
     def saveImage(self):
         with open(self.labelfilename, 'w') as f:
             for bbox,bboxcls in zip(self.bboxList,self.bboxListCls):
@@ -350,15 +350,15 @@ class LabelTool():
 
 """ In case you need convert and deconvert outside of the class, here they can be used for copy
     def convert(size, box):
-        
+
         x = box[0]/1.0 + (box[2])/2.0
         y = box[1]/1.0 + box[3]/2.0
         x = x/size[0]
         y = y/size[1]
-        
+
         w = box[2]/size[0]
         h = box[3]/size[1]
-        
+
         return (x,y,w,h)
 
     def deconvert(img_w,img_h,annbox):
